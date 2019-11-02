@@ -18,8 +18,7 @@ public class PlayerController : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        
+    {      
         sprintCount = 100;
         transform = this.GetComponent<Transform>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
