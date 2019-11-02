@@ -7,7 +7,9 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed;
     public Transform squareTransform;
     
-    private bool isRunning;
+    private Vector3 mousePosition;
+    private Vector3 objectPosition;
+    private float angle;
     private int sprintCount;
     private Vector3 playerInput;
     private Vector3 maxPlayerInput;
@@ -17,7 +19,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //isRunning = false;
+        
         sprintCount = 100;
         transform = this.GetComponent<Transform>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
@@ -27,8 +29,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         playerInput = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
+
+        //sprint
         if (Input.GetKey(KeyCode.LeftShift) && (sprintCount <= 100 && sprintCount > 0)){
-            //isRunning = true;
             moveSpeed = 10;
             transform.position += playerInput * moveSpeed * Time.deltaTime;
             sprintCount -= 1;
@@ -43,10 +46,21 @@ public class PlayerController : MonoBehaviour
             transform.position += playerInput * moveSpeed * Time.deltaTime;
             }
 
+        //rotation
+        mousePosition = Input.mousePosition;
+        objectPosition = Camera.main.WorldToScreenPoint(transform.position);
+
+        mousePosition.x = mousePosition.x - objectPosition.x;
+        mousePosition.y = mousePosition.y - objectPosition.y;
+ 
+        angle = Mathf.Atan2(mousePosition.y, mousePosition.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+
 
         transform.position += playerInput * moveSpeed * Time.deltaTime;
         spriteRenderer.color = new Color(transform.position.x, transform.position.y, 50);
         squareTransform.GetComponent<SpriteRenderer>().color = new Color(transform.position.x, transform.position.y, 50);
         
+
     }
 }
