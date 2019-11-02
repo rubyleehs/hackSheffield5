@@ -48,9 +48,5 @@ public class PlayerController : MonoBehaviour
         spriteRenderer.color = new Color(transform.position.x, transform.position.y, 50);
         squareTransform.GetComponent<SpriteRenderer>().color = new Color(transform.position.x, transform.position.y, 50);
         
-        
-        
-
-        
     }
 }
