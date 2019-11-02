@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WebSocketSharp;
 
-public class receiveTest : MonoBehaviour {
+public class twilioInterface : MonoBehaviour {
     public string status;
     string to;
     string from;
