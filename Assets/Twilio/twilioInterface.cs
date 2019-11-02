@@ -45,9 +45,9 @@ public class twilioInterface : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (status == "ringing" || status == "in-progress") {
-            GetComponent<Renderer>().enabled = true;
+            GetComponent<SpriteRenderer>().color = new Color(255, 0, 0);
         } else {
-            GetComponent<Renderer>().enabled = false;
+            GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
         }
 
         if (getInput) {
