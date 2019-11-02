@@ -2,13 +2,13 @@ const express = require('express');
 const wss = require('websocket').server;
 const http = require('http');
 const bodyParser = require('body-parser');
+const localtunnel = require('localtunnel');
 const VoiceResponse = require('twilio').twiml.VoiceResponse;
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 
-var hostname = 'http://7c77eb3f.ngrok.io/';
-
+var hostname;
 var currentConnection;
 var callSid;
 
@@ -16,6 +16,14 @@ const accountSid = 'ACb76d16c8bc2b004e5dddcd938787c35d';
 const authToken = '30d49e1ab201595bb083590e8c00ab0b';
 const client = require('twilio')(accountSid, authToken);
 
+(async () => {
+  const tunnel = await localtunnel({ port: 3000 });
+  hostname = tunnel.url;
+  console.log("Server accesible at " + hostname);
+  tunnel.on('close', () => {
+    // tunnel is closed
+  });
+})();
 
 var server = http.createServer(function(request, response) {
     // process HTTP request. Since we're writing just WebSockets
