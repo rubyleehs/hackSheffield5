@@ -69,7 +69,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e3e3a0f431298d24f9b1a4c0fec1d655, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2403c2c6720c7cf4f8ba03b36fec40b2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -126,7 +126,7 @@ Transform:
   m_GameObject: {fileID: 1835843039334272801}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12.528811, y: 13.313282, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 1835843038527097660}
   m_Father: {fileID: 0}
@@ -169,7 +169,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e3e3a0f431298d24f9b1a4c0fec1d655, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c3d016f5d5d61ce42a15f78d6979ec26, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -193,15 +193,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  walkSpeed: 1
-  sprintSpeed: 4
-  maxSprint: 500
-  sprintCount: 0
+  walkSpeed: 2
+  sprintSpeed: 5
+  maxSprint: 250
+  sprintCount: 250
   phone: {fileID: 1835843038527097663}
   holdingPhone: 1
   phoneGrabRange: 1
   phoneOffsetX: 0.15
-  phoneOffsetY: 0
+  phoneOffsetY: -0.2
 --- !u!50 &1835843039334272804
 Rigidbody2D:
   serializedVersion: 4
@@ -238,4 +238,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.16
+  m_Radius: 0.28

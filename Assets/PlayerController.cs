@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         playerInput = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
         //sprint
-        if (Input.GetKey(KeyCode.LeftShift) && (sprintCount <= maxSprint && sprintCount > 0)){
+        if (Input.GetKey(KeyCode.LeftShift) && sprintCount > 0){
             transform.position += playerInput * sprintSpeed * Time.deltaTime;
             sprintCount -= 1;
         }
