@@ -25,7 +25,7 @@ public class MapManager : MonoBehaviour
                 if (map.cellTypeMap[x, y] == 0) Instantiate(testCell, new Vector2(x, y), Quaternion.identity);
                 if (map.cellTypeMap[x, y] == 2)
                 {
-                    Instantiate(testPath, new Vector2(x, y), Quaternion.identity);
+                    //Instantiate(testPath, new Vector2(x, y), Quaternion.identity);
                 }
             }
         }

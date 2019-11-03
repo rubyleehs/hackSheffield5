@@ -13,7 +13,7 @@ public class MapGen : MonoBehaviour
         outputMap.mainArea = new SubArea(Vector2Int.one, resolution - Vector2Int.one * 2);
         LayeredSplit(outputMap.mainArea, maxSplitVariance, minSubAreaSize, 5);
         ConvertSubAreasToRooms(ref outputMap);
-        CreateMainConnections(ref outputMap, outputMap.mainArea);
+        outputMap.mainArea.GiveUpAndForceBoringCorridors(ref outputMap);
 
         return outputMap;
     }
@@ -35,13 +35,8 @@ public class MapGen : MonoBehaviour
         if (subArea.childsSubArea == null) return;
         for (int i = 0; i < subArea.childsSubArea.Count; i++)
         {
-            for (int ii = 0; ii < subArea.childsSubArea[i].connection.Count; ii++)
-            {
-                Vector2Int temp = subArea.childsSubArea[i].connection[ii];
-                map.cellTypeMap[temp.x, temp.y] = 2;
-            }
             ExtendConnections(ref map, subArea.childsSubArea[i]);
-            CreateMainConnections(ref map, subArea.childsSubArea[i]);//
+            CreateMainConnections(ref map, subArea.childsSubArea[i]);
         }
 
         //if(subArea.childsSubArea.Count ==2) Connect(ref map, subArea.childsSubArea[0], subArea.childsSubArea[1]);
@@ -80,22 +75,22 @@ public class MapGen : MonoBehaviour
         }
     }
 
-
     public bool ExtendConnections(ref Map map, SubArea subArea)
     {
-        if (subArea.connection.Count == 0) return false;
+        if (subArea.connection == null) return false;
+        if (subArea.connection.Count == 0) Debug.Log("Meow");
         for (int i = 0; i < subArea.connection.Count; i++)
         {
             if (subArea.splitX)
             {
                 int dx = 0;
-                while (subArea.connection[i].x + dx < map.resolution.x - 1 && map.cellTypeMap[subArea.connection[i].x + dx, subArea.connection[i].y] != 1)
+                while (subArea.connection[i].x + dx < map.resolution.x - 1 && map.cellTypeMap[subArea.connection[i].x + dx, subArea.connection[i].y] == 0)
                 {
                     map.cellTypeMap[subArea.connection[i].x + dx, subArea.connection[i].y] = 2;
                     dx++;
                 }
                 dx = -1;
-                while (subArea.connection[i].x + dx > 0 && map.cellTypeMap[subArea.connection[i].x + dx, subArea.connection[i].y] != 1)
+                while (subArea.connection[i].x + dx > 0 && map.cellTypeMap[subArea.connection[i].x + dx, subArea.connection[i].y] == 0)
                 {
                     map.cellTypeMap[subArea.connection[i].x + dx, subArea.connection[i].y] = 2;
                     dx--;
@@ -104,13 +99,13 @@ public class MapGen : MonoBehaviour
             else
             {
                 int dy = 0;
-                while (subArea.connection[i].y + dy < map.resolution.y - 1 && map.cellTypeMap[subArea.connection[i].x, subArea.connection[i].y + dy] != 1)
+                while (subArea.connection[i].y + dy < map.resolution.y - 1 && map.cellTypeMap[subArea.connection[i].x, subArea.connection[i].y + dy] == 0)
                 {
                     map.cellTypeMap[subArea.connection[i].x, subArea.connection[i].y + dy] = 2;
                     dy++;
                 }
                 dy = -1;
-                while (subArea.connection[i].y + dy > 0 && map.cellTypeMap[subArea.connection[i].x, subArea.connection[i].y + dy] != 1)
+                while (subArea.connection[i].y + dy > 0 && map.cellTypeMap[subArea.connection[i].x, subArea.connection[i].y + dy] == 0)
                 {
                     map.cellTypeMap[subArea.connection[i].x, subArea.connection[i].y + dy] = 2;
                     dy--;
@@ -202,7 +197,7 @@ public class MapGen : MonoBehaviour
         else return null;
     }
 }
- 
+
 public class SubArea
 {
     public SubArea parentSubArea;
@@ -212,10 +207,10 @@ public class SubArea
     public Vector2Int size;
     public bool isTooSmall = false;
     public bool splitX;
+    public int variance;
 
     public SubArea(Vector2Int anchor, Vector2Int size, SubArea parentSubArea = null)
     {
-        connection = new List<Vector2Int>();
         this.anchor = anchor;
         this.size = size;
     }
@@ -228,22 +223,22 @@ public class SubArea
             return;
         }
         childsSubArea = new List<SubArea>();
+        connection = new List<Vector2Int>();
 
-        splitX = Random.Range(-Mathf.Pow(size.x,4), Mathf.Pow(size.y,4)) < 0;
-        int variance = Random.Range(-maxSplitVariance, maxSplitVariance + 1);
+        splitX = Random.Range(-Mathf.Pow(size.x, 4), Mathf.Pow(size.y, 4)) < 0;
+        variance = Random.Range(-maxSplitVariance, maxSplitVariance);
 
         if (splitX)
         {
             if (size.x * 0.5f + variance - 1 > minSubAreaSize) childsSubArea.Add(new SubArea(anchor, new Vector2Int(Mathf.FloorToInt(size.x * 0.5f) + variance, size.y), this));
-            if (size.x * 0.5f - variance - 1 > minSubAreaSize) childsSubArea.Add(new SubArea(anchor + Vector2Int.right * (Mathf.FloorToInt(size.x * 0.5f) + variance + 1), new Vector2Int(Mathf.FloorToInt(size.x * 0.5f) - variance - 1, size.y),this));
-            connection.Add(new Vector2Int(anchor.x + Mathf.FloorToInt(size.x * 0.5f) + variance, anchor.y + Random.Range(0, size.y)));
+            if (size.x * 0.5f - variance - 1 > minSubAreaSize) childsSubArea.Add(new SubArea(anchor + Vector2Int.right * (Mathf.FloorToInt(size.x * 0.5f) + variance + 1), new Vector2Int(Mathf.FloorToInt(size.x * 0.5f) - variance - 1, size.y), this));
+            if (size.x * 0.5f + variance - 1 > minSubAreaSize && size.x * 0.5f - variance - 1 > minSubAreaSize) connection.Add(new Vector2Int(anchor.x + Mathf.FloorToInt(size.x * 0.5f) + variance, anchor.y + Random.Range(0, size.y)));
         }
         else
         {
-            if (size.y * 0.5f + variance - 1 > minSubAreaSize) childsSubArea.Add(new SubArea(anchor, new Vector2Int(size.x, Mathf.FloorToInt(size.y * 0.5f) + variance),this));
+            if (size.y * 0.5f + variance - 1 > minSubAreaSize) childsSubArea.Add(new SubArea(anchor, new Vector2Int(size.x, Mathf.FloorToInt(size.y * 0.5f) + variance), this));
             if (size.y * 0.5f - variance - 1 > minSubAreaSize) childsSubArea.Add(new SubArea(anchor + Vector2Int.up * (Mathf.FloorToInt(size.y * 0.5f) + variance + 1), new Vector2Int(size.x, Mathf.FloorToInt(size.y * 0.5f) - variance - 1), this));
-            connection.Add(new Vector2Int(anchor.x + Random.Range(0, size.x), anchor.y + (Mathf.FloorToInt(size.y * 0.5f) + variance)));
-
+            if (size.y * 0.5f + variance - 1 > minSubAreaSize && size.y * 0.5f - variance - 1 > minSubAreaSize) connection.Add(new Vector2Int(anchor.x + Random.Range(0, size.x), anchor.y + (Mathf.FloorToInt(size.y * 0.5f) + variance)));
         }
 
         if (childsSubArea.Count == 0) childsSubArea = null;
@@ -257,6 +252,25 @@ public class SubArea
             Debug.DrawLine(anchor + new Vector2(size.x * 0.5f, size.y * 0.5f), childsSubArea[i].anchor + new Vector2(childsSubArea[i].size.x * 0.5f, childsSubArea[i].size.y * 0.5f), Color.red);
             childsSubArea[i].ShowHeirachy();
         }
-       
-    } 
+    }
+
+    public void GiveUpAndForceBoringCorridors(ref Map map)
+    {
+        if (childsSubArea == null) return;
+        if (childsSubArea.Count >= 2)
+        {
+            for (int x = childsSubArea[0].anchor.x + childsSubArea[0].size.x / 2; x <= childsSubArea[1].anchor.x + childsSubArea[1].size.x / 2; x++)
+            {
+                for (int y = childsSubArea[0].anchor.y + childsSubArea[0].size.y / 2; y <= childsSubArea[1].anchor.y + childsSubArea[1].size.y / 2; y++)
+                {
+                    Debug.Log("Forced!");
+                    map.cellTypeMap[x, y] = 2;
+                }
+            }
+        }
+        for (int i = 0; i < childsSubArea.Count; i++)
+        {
+            childsSubArea[i].GiveUpAndForceBoringCorridors(ref map);
+        }
+    }
 }

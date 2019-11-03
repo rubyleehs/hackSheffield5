@@ -155,10 +155,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapGen: {fileID: 511335661}
-  map: {fileID: 0}
-  resolution: {x: 100, y: 100}
-  maxSplitVariance: 9
-  minSubAreaSize: 6
+  resolution: {x: 50, y: 50}
+  maxSplitVariance: 5
+  minSubAreaSize: 4
   testCell: {fileID: 719395238016159184, guid: f26405c0887190942a3eeb02e362bd29, type: 3}
   testPath: {fileID: 1759092402891991413, guid: 05243b2f8c6762a43b06d21c9b6f1fdb,
     type: 3}
