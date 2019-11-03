@@ -36,6 +36,8 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Coin") {
             Destroy(collision.gameObject);
             score++;
+        } else if (collision.gameObject.tag == "Enemy") {
+            Destroy(this.gameObject);
         }
     }
 

@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 0de1a15228b331a459239a1066913291, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c3d016f5d5d61ce42a15f78d6979ec26, type: 3}
   m_Color: {r: 0.9056604, g: 0.24350302, b: 0.24350302, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -91,16 +91,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 570069518588276832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51ec5319c9a376f4fad0d9195771ee59, type: 3}
+  m_Script: {fileID: 11500000, guid: 2af7c79eaa93db844b8b3e49724e52bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   minSpawnSqrDistFromPlayer: 15
-  moveSpeed: 3
-  sqrDetectionRange: 64
-  fovAngle: 35
+  moveSpeed: 4
+  sqrDetectionRange: 15
+  fovAngle: 40
   patrolPathNodeCount: 4
   lookAroundSpeed: 40
-  lookAroundAngle: 80
+  lookAroundAngle: 40
   wallMask:
     serializedVersion: 2
     m_Bits: 256

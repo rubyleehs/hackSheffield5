@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour
     public float fovAngle;
     public int patrolPathNodeCount;
 
+    public GameObject phone;
+
     public float lookAroundSpeed;
     public float lookAroundAngle;
     public LayerMask wallMask;
@@ -49,7 +51,10 @@ public class Enemy : MonoBehaviour
         if (delta.sqrMagnitude < sqrDetectionRange && Mathf.Abs(Vector3.Angle(delta, transform.right)) <= fovAngle && HasDirectLineOFSight(transform.position, PlayerController.transform.position, 0))
         {//
             AlertPosition(PlayerController.transform.position);
-            Fire();
+        }
+        else if (phone.GetComponent<twilioInterface>().status == "ringing" || phone.GetComponent<twilioInterface>().status == "in-progress") 
+        {
+            AlertPosition(phone.transform.position);
         }
         else 
         {
