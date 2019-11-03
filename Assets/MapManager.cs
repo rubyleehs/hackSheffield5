@@ -5,11 +5,13 @@ using UnityEngine;
 public class MapManager : MonoBehaviour
 {
     public MapGen mapGen;
-    public Map map;
+    public static Map map;
 
     public Vector2Int resolution;
     public int maxSplitVariance;
     public int minSubAreaSize;
+
+    public static PathFinderAStar pathFinder;
 
     public int numCoins;
 
@@ -20,6 +22,7 @@ public class MapManager : MonoBehaviour
     private void Awake()
     {
         map = mapGen.GenerateNewMap(resolution,maxSplitVariance,minSubAreaSize);
+        pathFinder = new PathFinderAStar(map.cellTypeMap, new HashSet<int>() { 1, 2 });
 
         for (int y = 0; y < map.resolution.y; y++)
         {

@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour
     public float phoneOffsetX;
     public float phoneOffsetY;
 
+    public static new Transform transform;
+
     private Vector3 mousePosition;
     private Vector3 objectPosition;
     private float angle;
@@ -24,6 +26,11 @@ public class PlayerController : MonoBehaviour
     private Vector3 playerInput;
     private Vector3 maxPlayerInput;
 
+    private void Awake()
+    {
+        transform = GetComponent<Transform>();
+    }
+
     void OnCollisionEnter2D(Collision2D collision) {
         //Check for a match with the specific tag on any GameObject that collides with your GameObject
         if (collision.gameObject.tag == "Coin") {
@@ -31,10 +38,6 @@ public class PlayerController : MonoBehaviour
             Destroy(collision.gameObject);
             score++;
         }
-    }
-
-    // Start is called before the first frame update
-    void Start() {
     }
 
     // Update is called once per frame
