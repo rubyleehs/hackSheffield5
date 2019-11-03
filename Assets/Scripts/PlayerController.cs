@@ -34,7 +34,6 @@ public class PlayerController : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision) {
         //Check for a match with the specific tag on any GameObject that collides with your GameObject
         if (collision.gameObject.tag == "Coin") {
-            Debug.Log("Collected coin");
             Destroy(collision.gameObject);
             score++;
         }

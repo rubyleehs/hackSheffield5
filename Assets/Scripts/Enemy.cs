@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public float minSpawnSqrDistFromPlayer = 15;
+
     public float moveSpeed;
     public float sqrDetectionRange;
     public float fovAngle;
+    public int patrolPathNodeCount;
 
     public float lookAroundSpeed;
     public float lookAroundAngle;
@@ -15,23 +18,43 @@ public class Enemy : MonoBehaviour
     public List<Vector2Int> patrolPath;
     public int patrolPathProgress;
 
-    public bool isPatrolling;
-    public bool isAlert;
+    public bool isPatrolling = true;
+    public bool isAlert = false;
     public Vector2 target;
     public IEnumerator actionInExecution;
+
+    private void Awake()//
+    {
+        patrolPath = new List<Vector2Int>();
+        Vector2Int spawnPoint = MapManager.map.RequestEmptyTile();
+        while (Vector2.SqrMagnitude(PlayerController.transform.position - (Vector3)(Vector2)spawnPoint) < minSpawnSqrDistFromPlayer) spawnPoint = MapManager.map.RequestEmptyTile();
+        patrolPath.Add(spawnPoint);
+        transform.position = (Vector2)spawnPoint;
+
+        for (int i = 1; i < patrolPathNodeCount; i++)
+        {
+            patrolPath.Add(MapManager.map.RequestEmptyTile());
+        }
+        target = patrolPath[patrolPathProgress];
+    }
+
+    private void Update()
+    {
+        SmartMove();
+    }
 
     public void SmartMove()
     {
         Vector3 delta = transform.position - PlayerController.transform.position;
         if (delta.sqrMagnitude < sqrDetectionRange && Mathf.Abs(Vector3.Angle(delta, transform.right)) <= fovAngle && HasDirectLineOFSight(transform.position, PlayerController.transform.position, 0))
-        {
+        {//
             AlertPosition(PlayerController.transform.position);
             Fire();
         }
         else 
         {
             if (actionInExecution != null) return;
-            MoveTowards(PathfindPathTowards(target));
+            MoveTowards(PathfindPathTowards(Vector2Int.RoundToInt(target)));
             if (Vector2.Distance(transform.position, target) < 0.25f)
             {
                 if (!isPatrolling)
@@ -43,6 +66,7 @@ public class Enemy : MonoBehaviour
                         if (actionInExecution == null)
                         {
                             isAlert = false;
+                            Debug.Log(patrolPath[patrolPathProgress]);
                             target = patrolPath[patrolPathProgress];
                         }
                     }
@@ -51,6 +75,7 @@ public class Enemy : MonoBehaviour
                 else
                 {
                     patrolPathProgress = (patrolPathProgress + 1) % (patrolPath.Count - 1);
+                    Debug.Log(patrolPath[patrolPathProgress]);
                     target = patrolPath[patrolPathProgress];
                 }
             }
@@ -77,17 +102,20 @@ public class Enemy : MonoBehaviour
         else return !(Physics2D.Raycast(start + Vector2.up * radius, end - start, _magnitude, wallMask) || Physics2D.Raycast(start - Vector2.up * radius, end - start, _magnitude, wallMask) || Physics2D.Raycast(start + Vector2.left * radius, end - start, _magnitude, wallMask) || Physics2D.Raycast(start + Vector2.right * radius, end - start, _magnitude, wallMask));
     }
 
-    public Vector3 PathfindPathTowards(Vector3 target)
+    public Vector3 PathfindPathTowards(Vector2Int target)
     {
-        List<Vector2> path = MapManager.pathFinder.Locate(Vector2Int.RoundToInt(transform.position), Vector2Int.RoundToInt(PlayerController.transform.position));
+        List <Vector2> path = MapManager.pathFinder.Locate(Vector2Int.RoundToInt(transform.position), target);
+
         if (path.Count > 1) return path[1];
         else if (path.Count == 1) return path[0];
-        else return target;
+        else return (Vector2)target;
     }
 
     public void MoveTowards(Vector3 target)
     {
-        transform.position = (target - transform.position).normalized * moveSpeed * GameManager.deltaTime;
+        //if(target != transform.position) transform.rotation = Quaternion.LookRotation(target - transform.position);//
+        
+        transform.position += (target - transform.position).normalized * moveSpeed * Time.deltaTime;
     }
 
     public void Fire()

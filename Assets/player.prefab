@@ -69,12 +69,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2403c2c6720c7cf4f8ba03b36fec40b2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ccb01bf9d38bf1e47be28283f9e11c6b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.32}
+  m_Size: {x: 0.32, y: 0.16}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1835843038527097663}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 670dd2cf03097da46baabd79425013e4, type: 3}
+  m_Script: {fileID: 11500000, guid: 0f72f9b3120dbb2409cd8d8b6c5e7a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   status: 
@@ -169,12 +169,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c3d016f5d5d61ce42a15f78d6979ec26, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0de1a15228b331a459239a1066913291, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.32, y: 0.32}
+  m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -195,7 +195,6 @@ MonoBehaviour:
   score: 0
   walkSpeed: 4
   sprintSpeed: 8
-  maxSprint: 250
   sprintCount: 250
   phone: {fileID: 1835843038527097663}
   holdingPhone: 1

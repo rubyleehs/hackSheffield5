@@ -32,7 +32,7 @@ public class Node
     }
 }
 
-public class PathFinderAStar : MonoBehaviour
+public class PathFinderAStar
 {    
     Node[,] grid;
     int gridRows
@@ -64,49 +64,61 @@ public class PathFinderAStar : MonoBehaviour
 
     public List<Vector2> Locate(Vector2Int starting, Vector2Int ending)
     {
+        if (starting == ending) return new List<Vector2>() { ending };
         Node start = new Node(new Vector2Int(starting.x, starting.y), true);
         Node end = new Node(new Vector2Int(ending.x, ending.y), true);
 
         Stack<Node> pathStack = new Stack<Node>();
         List<Node> openList = new List<Node>();
-        List<Node> closedList = new List<Node>();
+        Dictionary<Vector2Int,Node> closedList = new Dictionary<Vector2Int, Node>();
         List<Node> adjacentNodes;
+        bool endFound = false;
         Node currentNode = start;
 
         openList.Add(start);
-
-        while(openList.Count != 0 && !closedList.Exists(x => x.position == end.position))
+        while(openList.Count != 0 && !endFound)
         {
             currentNode = openList[0];
-            openList.Remove(currentNode);
-            closedList.Add(currentNode);
+            openList.RemoveAt(0);
+            if (currentNode == null) continue;
+            closedList.Add(currentNode.position, currentNode);
+            if (currentNode.position == end.position)
+            {
+                endFound = true;
+                break;
+            }            
             adjacentNodes = GetAdjacentNodes(currentNode);
-
             foreach(Node n in adjacentNodes)
             {
-                if (!closedList.Contains(n) && n.isPassable)
+                if (n.isPassable && !closedList.ContainsKey(n.position))
                 {
                     if (!openList.Contains(n))
                     {
                         n.parent = currentNode;
-                        n.distance = Math.Abs(n.position.x - end.position.x) + Math.Abs(n.position.y - end.position.y);
+                        n.distance = Vector2.Distance(n.position, end.position);
                         n.cost = n.parent.cost + 1;
-                        for (int i = 0; i < openList.Count; i++)
+                        if (openList.Count == 0) openList.Add(n);
+                        else
                         {
-                            if (n.cost > openList[i].cost) continue;
-                            openList.Insert(i, n);
+                            for (int i = 0; i < openList.Count; i++)
+                            {
+                                if (i != openList.Count - 1 && n.cost + n.distance > openList[i].cost + openList[i].distance) continue;
+                                openList.Insert(i, n);
+                                break;
+                            }
                         }
                     }
                 }
             }
         }
 
-        if(!closedList.Exists(x => x.position == end.position))
+        if(!endFound)
         {
-            return null;
+            Debug.Log("EndNotFound!");
+            return new List<Vector2>() { starting };
         }
 
-        Node temp = closedList[closedList.IndexOf(currentNode)];
+        Node temp = closedList[currentNode.position];
         while(temp.parent != start && temp != null)
         {
             pathStack.Push(temp);
@@ -119,7 +131,6 @@ public class PathFinderAStar : MonoBehaviour
         {
             path.Add(n.position);
         }
-        
         return path;
     }
 
@@ -129,8 +140,8 @@ public class PathFinderAStar : MonoBehaviour
         int row = (int)n.position.y;
         int col = (int)n.position.x;
 
-        if (row - 1 >= 0) { tempList.Add(grid[col, row + 1]); }
         if (row - 1 >= 0) { tempList.Add(grid[col, row - 1]); }
+        if (row + 1 < gridRows) { tempList.Add(grid[col, row + 1]); }
         if (col - 1 >= 0) { tempList.Add(grid[col - 1, row]); }
         if (col + 1 < gridCols) { tempList.Add(grid[col + 1, row]); }
 
