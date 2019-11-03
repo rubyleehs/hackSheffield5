@@ -8,8 +8,7 @@ public class PlayerController : MonoBehaviour
 
     public float walkSpeed;
     public float sprintSpeed;
-    public int maxSprint;
-    public int sprintCount ;
+    public int sprintCount;
 
     public GameObject phone;
     public bool holdingPhone;
@@ -20,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 mousePosition;
     private Vector3 objectPosition;
     private float angle;
+    private int maxSprint = 100;
 
     private Vector3 playerInput;
     private Vector3 maxPlayerInput;
@@ -46,8 +46,9 @@ public class PlayerController : MonoBehaviour
             transform.position += playerInput * sprintSpeed * Time.deltaTime;
             sprintCount -= 1;
         }
-        else if (sprintCount < maxSprint && !Input.GetKey(KeyCode.LeftShift)){ 
-            sprintCount += 2;
+        if (!Input.GetKey(KeyCode.LeftShift)) {
+            if (sprintCount < maxSprint)
+                sprintCount += 2;
             transform.position += playerInput * walkSpeed * Time.deltaTime;
         }
         else {
