@@ -55,7 +55,7 @@ public class Enemy : MonoBehaviour
         {
             if (actionInExecution != null) return;
             MoveTowards(PathfindPathTowards(Vector2Int.RoundToInt(target)));
-            if (Vector2.Distance(transform.position, target) < 0.25f)
+            if (Vector2.Distance(transform.position, target) < 0.1f)
             {
                 if (!isPatrolling)
                 {
