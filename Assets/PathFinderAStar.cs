@@ -8,7 +8,7 @@ public class Node
 {
     public static int NODE_SIZE = 32;
     public Node parent;
-    public Vector2 position;
+    public Vector2Int position;
     public float distance;
     public float cost;
     public float F
@@ -23,7 +23,7 @@ public class Node
     }
     public bool isPassable;
 
-    public Node(Vector2 pos, bool passable)
+    public Node(Vector2Int pos, bool passable)
     {
         parent = null;
         position = pos;
@@ -34,36 +34,39 @@ public class Node
 }
 
 public class PathFinderAStar : MonoBehaviour
-{
-    int[,] map;
-
-    
-    List<List<Node>> grid;
+{    
+    Node[,] grid;
     int gridRows
     {
         get
         {
-            return grid[0].Count;
+            return grid.GetLength(1);
         }
     }
     int gridCols
     {
         get
         {
-            return grid.Count;
+            return grid.GetLength(0);
         }
     }
-    
 
-    public PathFinderAStar(List<List<Node>> gridNodes)
+    public PathFinderAStar(int[,] map, HashSet<int> passableIds)
     {
-        grid = gridNodes;
+        grid = new Node[map.GetLength(0), map.GetLength(1)];
+        for (int y = 0; y < map.GetLength(1); y++)
+        {
+            for (int x = 0; x < map.GetLength(0); x++)
+            {
+                grid[x, y] = new Node(new Vector2Int(x, y), passableIds.Contains(map[x, y]));
+            }
+        }
     }
 
-    public List<Vector2> Locate(Vector2 starting, Vector2 ending)
+    public List<Vector2> Locate(Vector2Int starting, Vector2Int ending)
     {
-        Node start = new Node(new Vector2(starting.x, starting.y), true);
-        Node end = new Node(new Vector2(ending.x, ending.y), true);
+        Node start = new Node(new Vector2Int(starting.x, starting.y), true);
+        Node end = new Node(new Vector2Int(ending.x, ending.y), true);
 
         Stack<Node> pathStack = new Stack<Node>();
         List<Node> openList = new List<Node>();
@@ -89,8 +92,11 @@ public class PathFinderAStar : MonoBehaviour
                         n.parent = currentNode;
                         n.distance = Math.Abs(n.position.x - end.position.x) + Math.Abs(n.position.y - end.position.y);
                         n.cost = n.parent.cost + 1;
-                        openList.Add(n);
-                        openList = openList.OrderBy(Node => Node.F).ToList<Node>();
+                        for (int i = 0; i < openList.Count; i++)
+                        {
+                            if (n.cost > openList[i].cost) continue;
+                            openList.Insert(i, n);
+                        }
                     }
                 }
             }
@@ -123,15 +129,14 @@ public class PathFinderAStar : MonoBehaviour
         List<Node> tempList = new List<Node>();
         int row = (int)n.position.y;
         int col = (int)n.position.x;
-        
-        if(row - 1 >= 0) { tempList.Add(grid[col][row + 1]); }
-        if(row - 1 >= 0) { tempList.Add(grid[col][row - 1]); }
-        if(col - 1 >= 0) { tempList.Add(grid[col - 1][row]); }
-        if(col + 1 < gridCols) { tempList.Add(grid[col + 1][row]); }
+
+        if (row - 1 >= 0) { tempList.Add(grid[col, row + 1]); }
+        if (row - 1 >= 0) { tempList.Add(grid[col, row - 1]); }
+        if (col - 1 >= 0) { tempList.Add(grid[col - 1, row]); }
+        if (col + 1 < gridCols) { tempList.Add(grid[col + 1, row]); }
 
         return tempList;
     }
-
 }
 
 
