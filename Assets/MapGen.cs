@@ -263,14 +263,13 @@ public class SubArea
             {
                 for (int y = childsSubArea[0].anchor.y + childsSubArea[0].size.y / 2; y <= childsSubArea[1].anchor.y + childsSubArea[1].size.y / 2; y++)
                 {
-                    Debug.Log("Forced!");
                     map.cellTypeMap[x, y] = 2;
                 }
             }
         }
         for (int i = 0; i < childsSubArea.Count; i++)
         {
-            childsSubArea[i].GiveUpAndForceBoringCorridors(ref map);
+            childsSubArea[i].GiveUpAndForceBoringCorridors(ref map);//
         }
     }
 }
