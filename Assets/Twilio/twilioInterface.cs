@@ -14,7 +14,7 @@ public class twilioInterface : MonoBehaviour {
     public bool getInput;
     public string DTMF;
     public int inputLength = 1;
-    bool rippled = false;
+    public int rippled;
 
     public RippleEffect ripple;
 
@@ -43,19 +43,22 @@ public class twilioInterface : MonoBehaviour {
             }
             };
         ws.Connect ();
+        
+        rippled = 80;
     }
 
     // Update is called once per frame
     void Update() {
         if (status == "ringing" || status == "in-progress") {
             GetComponent<SpriteRenderer>().color = new Color(255, 0, 0);
-            if (!rippled) {
+            if (rippled >= 80) {
                 ripple.AddRipple(transform.position, 1f, 0.15f);
-                rippled = true;
+                rippled = 0;
             }
+            rippled += 1;
         } else {
             GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
-            rippled = false;
+            rippled = 80;
         }
 
         if (getInput) {

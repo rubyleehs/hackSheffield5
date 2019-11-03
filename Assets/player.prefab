@@ -97,6 +97,7 @@ MonoBehaviour:
   getInput: 0
   DTMF: 
   inputLength: 1
+  ripple: {fileID: 0}
 --- !u!1 &1835843039334272801
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,7 +200,7 @@ MonoBehaviour:
   phone: {fileID: 1835843038527097663}
   holdingPhone: 1
   phoneGrabRange: 2
-  phoneOffsetX: 0
+  phoneOffsetX: 0.1
   phoneOffsetY: -0.25
 --- !u!50 &1835843039334272804
 Rigidbody2D:
