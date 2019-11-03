@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class Node
 {
-    public static int NODE_SIZE = 32;
     public Node parent;
     public Vector2Int position;
     public float distance;
