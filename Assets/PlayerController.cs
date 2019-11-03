@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public int score;
+
     public float walkSpeed;
     public float sprintSpeed;
     public int sprintCount = 100;
