@@ -12,8 +12,8 @@ var hostname;
 var currentConnection;
 var callSid;
 
-const accountSid = 'ACb76d16c8bc2b004e5dddcd938787c35d';
-const authToken = '30d49e1ab201595bb083590e8c00ab0b';
+const accountSid = '';
+const authToken = '';
 const client = require('twilio')(accountSid, authToken);
 
 (async () => {
