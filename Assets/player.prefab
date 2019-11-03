@@ -193,8 +193,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 0
-  walkSpeed: 2
-  sprintSpeed: 5
+  walkSpeed: 4
+  sprintSpeed: 8
   maxSprint: 250
   sprintCount: 250
   phone: {fileID: 1835843038527097663}

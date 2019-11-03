@@ -11,8 +11,11 @@ public class MapManager : MonoBehaviour
     public int maxSplitVariance;
     public int minSubAreaSize;
 
+    public int numCoins;
+
     public GameObject testCell;
     public GameObject testPath;
+    public GameObject testCoin;
 
     private void Awake()
     {
@@ -27,6 +30,21 @@ public class MapManager : MonoBehaviour
                 {
                     //Instantiate(testPath, new Vector2(x, y), Quaternion.identity);
                 }
+            }
+        }
+
+        for (int i = 0; i < numCoins; i++) {
+            Instantiate(testCoin, getEmpty(), Quaternion.identity);
+        }
+    }
+
+    public Vector2 getEmpty() {
+        while (true) {
+            int x = Random.Range(0, resolution.x - 1);
+            int y = Random.Range(0, resolution.y - 1);
+
+            if (map.cellTypeMap[x, y] == 1) {
+                return new Vector2 (x, y);
             }
         }
     }
