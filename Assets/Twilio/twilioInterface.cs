@@ -14,6 +14,9 @@ public class twilioInterface : MonoBehaviour {
     public bool getInput;
     public string DTMF;
     public int inputLength = 1;
+    bool rippled = false;
+
+    public RippleEffect ripple;
 
     WebSocket ws;
 
@@ -46,8 +49,13 @@ public class twilioInterface : MonoBehaviour {
     void Update() {
         if (status == "ringing" || status == "in-progress") {
             GetComponent<SpriteRenderer>().color = new Color(255, 0, 0);
+            if (!rippled) {
+                ripple.AddRipple(transform.position, 1f, 0.15f);
+                rippled = true;
+            }
         } else {
             GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
+            rippled = false;
         }
 
         if (getInput) {
