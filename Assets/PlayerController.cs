@@ -8,7 +8,8 @@ public class PlayerController : MonoBehaviour
 
     public float walkSpeed;
     public float sprintSpeed;
-    public int sprintCount = 100;
+    public int maxSprint;
+    public int sprintCount ;
 
     public GameObject phone;
     public bool holdingPhone;
@@ -32,12 +33,12 @@ public class PlayerController : MonoBehaviour
         playerInput = new Vector3(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
         //sprint
-        if (Input.GetKey(KeyCode.LeftShift) && (sprintCount <= 100 && sprintCount > 0)){
+        if (Input.GetKey(KeyCode.LeftShift) && (sprintCount <= maxSprint && sprintCount > 0)){
             transform.position += playerInput * sprintSpeed * Time.deltaTime;
             sprintCount -= 1;
         }
-        else if (sprintCount < 100 && !Input.GetKey(KeyCode.LeftShift)){ 
-            sprintCount += 1;
+        else if (sprintCount < maxSprint && !Input.GetKey(KeyCode.LeftShift)){ 
+            sprintCount += 2;
             transform.position += playerInput * walkSpeed * Time.deltaTime;
         }
         else {

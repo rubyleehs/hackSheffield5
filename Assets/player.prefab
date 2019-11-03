@@ -192,9 +192,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a242044ac50bf0e468cfcb111201809f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score: 0
   walkSpeed: 1
   sprintSpeed: 4
-  sprintCount: 100
+  maxSprint: 500
+  sprintCount: 0
   phone: {fileID: 1835843038527097663}
   holdingPhone: 1
   phoneGrabRange: 1
